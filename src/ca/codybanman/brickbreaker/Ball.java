@@ -1,25 +1,30 @@
 package ca.codybanman.brickbreaker;
 
+import java.awt.Color;
 import java.awt.geom.Ellipse2D;
 
 public class Ball extends GameObject {
 	
 	private final int RADIUS = 10;
-	private int speedX, speedY;
+	private int speedX = 5;
+	private int speedY = 5;
 	
-	public boolean visible;
 	
 	public Ellipse2D.Double collisionBox = new Ellipse2D.Double();
 
 	public Ball(int centerX, int centerY) {
 		super(centerX, centerY);
 		collisionBox.setFrame(centerX - RADIUS, centerY - RADIUS, RADIUS, RADIUS);
+		this.color = Color.red;
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		if(centerX - RADIUS <= 0 || centerX + RADIUS >= Game.WIDTH + 10) speedX = speedX * -1;
+		if(centerY - RADIUS <= 0 || centerY + RADIUS >= Game.HEIGHT + RADIUS * 2  + 10) speedY = speedY * -1;
+		centerX += speedX;
+		centerY += speedY;
+		collisionBox.setFrame(centerX - RADIUS, centerY - RADIUS, RADIUS, RADIUS);
 	}
 
 	@Override
@@ -42,14 +47,6 @@ public class Ball extends GameObject {
 
 	public void setSpeedY(int speedY) {
 		this.speedY = speedY;
-	}
-
-	public boolean isVisible() {
-		return visible;
-	}
-
-	public void setVisible(boolean visible) {
-		this.visible = visible;
 	}
 
 	public Ellipse2D.Double getCollisionBox() {
