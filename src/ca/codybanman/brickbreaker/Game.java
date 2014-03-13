@@ -13,8 +13,8 @@ public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int WIDTH = 375;
-	public static final int HEIGHT = 525;
+	public static final int WIDTH = 400;
+	public static final int HEIGHT = 550;
 	public static final String NAME = "BrickBreak!";
 	
 	public static Color background = Color.LIGHT_GRAY;
@@ -22,11 +22,6 @@ public class Game extends Canvas implements Runnable {
 	private JFrame frame;
 
 	public boolean running = false;
-	public int tickCount = 0;
-	public int ballX = 0;
-	public int ballY = 0;
-	public int speedX = 5;
-	public int speedY = 5;
 
 	public Game() {
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -103,12 +98,7 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void tick() {
-		if(ballX >= getWidth() - 50) speedX = -5;
-		if(ballX <= 0) speedX = 5;
-		if(ballY >= getHeight() - 50) speedY = -5;
-		if(ballY <= 0) speedY = 5;
-		ballX += speedX;
-		ballY += speedY;
+		
 	}
 
 	public void render() {
@@ -121,9 +111,6 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.setColor(background);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(Color.RED);
-		
-		g.fillOval(ballX, ballY, 50, 50);
 		
 		g.dispose();
 		bs.show();
