@@ -5,11 +5,13 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
-public class Game extends Canvas implements Runnable {
+public class Game extends Canvas implements Runnable, KeyListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,6 +32,8 @@ public class Game extends Canvas implements Runnable {
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		setFocusable(true);
+		addKeyListener(this);
 
 		frame = new JFrame(NAME);
 
@@ -43,7 +47,7 @@ public class Game extends Canvas implements Runnable {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		ball = new Ball(100, 100);
-		paddle = new Paddle((WIDTH+10)/2, HEIGHT);
+		paddle = new Paddle((WIDTH + 10) / 2, HEIGHT);
 
 	}
 
@@ -104,6 +108,10 @@ public class Game extends Canvas implements Runnable {
 	public void tick() {
 		ball.update();
 		paddle.update();
+
+		if (paddle.checkCollision(ball.collisionBox)) {
+			ball.setSpeedY(ball.getSpeedY() * -1);
+		}
 	}
 
 	public void render() {
@@ -116,33 +124,49 @@ public class Game extends Canvas implements Runnable {
 		g = bs.getDrawGraphics();
 		g.setColor(background);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		drawBall(g);
-		drawPaddle(g);
+
+		ball.draw(g);
+		paddle.draw(g);
 
 		g.dispose();
 		bs.show();
 	}
 
-	private void drawBall(Graphics g2) {
-		g.setColor(ball.getColor());
-		g.fillOval(ball.getCenterX() - ball.getRADIUS(), ball.getCenterY()
-				- ball.getRADIUS(), ball.getRADIUS() * 2, ball.getRADIUS() * 2);
-		g.setColor(Color.BLACK);
-		g.drawOval(ball.getCenterX() - ball.getRADIUS(), ball.getCenterY()
-				- ball.getRADIUS(), ball.getRADIUS() * 2, ball.getRADIUS() * 2);
-
-	}
-	
-	private void drawPaddle(Graphics g2) {
-		g.setColor(paddle.getColor());
-		g.fillRect(paddle.getCenterX() - paddle.getWidth()/2, paddle.getCenterY()
-				- paddle.getWidth()/2, paddle.getWidth(), paddle.getHEIGHT());
-		g.setColor(Color.black);
-		g.drawRect(paddle.getCenterX() - paddle.getWidth()/2, paddle.getCenterY()
-				- paddle.getWidth()/2, paddle.getWidth(), paddle.getHEIGHT());
-	}
-
 	public static void main(String args[]) {
 		new Game().start();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_LEFT:
+			paddle.moveLeft();
+			paddle.setMovingLeft(true);
+			break;
+		case KeyEvent.VK_RIGHT:
+			paddle.moveRight();
+			paddle.setMovingRight(true);
+			break;
+		}
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_LEFT:
+			paddle.stopLeft();
+			break;
+		case KeyEvent.VK_RIGHT:
+			paddle.stopRight();
+			break;
+		}
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }
