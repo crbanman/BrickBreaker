@@ -25,8 +25,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private JFrame frame;
 
 	public boolean running = false;
-	public Ball ball;
-	public Paddle paddle;
+	public static Ball ball;
+	public static Paddle paddle;
 
 	public Game() {
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
@@ -109,9 +109,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		ball.update();
 		paddle.update();
 
-		if (paddle.checkCollision(ball.collisionBox)) {
-			ball.setSpeedY(ball.getSpeedY() * -1);
-		}
+		
 	}
 
 	public void render() {

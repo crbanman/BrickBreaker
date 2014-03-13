@@ -7,8 +7,9 @@ import java.awt.Rectangle;
 public class Ball extends GameObject {
 
 	private final int RADIUS = 10;
-	private int speedX = 5;
-	private int speedY = 5;
+	private final int SPEED = 5;
+	private int speedX = SPEED;
+	private int speedY = SPEED;
 
 	public Rectangle collisionBox = new Rectangle(0, 0, 0, 0);
 
@@ -21,20 +22,43 @@ public class Ball extends GameObject {
 
 	@Override
 	public void update() {
-		if (centerX - RADIUS <= 0 || centerX + RADIUS >= Game.WIDTH + 10)
-			speedX = speedX * -1;
-		if (centerY - RADIUS <= 0
-				|| centerY + RADIUS >= Game.HEIGHT + RADIUS * 2 + 10)
-			speedY = speedY * -1;
+		
 		centerX += speedX;
 		centerY += speedY;
 		collisionBox.setBounds(centerX - RADIUS, centerY - RADIUS, RADIUS * 2,
 				RADIUS * 2);
+		
+		if (centerX - RADIUS <= 0 || centerX + RADIUS >= Game.WIDTH + 10) {
+			speedX = -speedX;
+		}
+		if (centerY - RADIUS <= 0
+				|| centerY + RADIUS >= Game.HEIGHT + RADIUS * 2 + 10) {
+			speedY = -speedY;
+		}
+
+		if (checkCollision(Game.paddle.getCollisionBoxTop())) {
+			speedY = -speedY;
+		}
+		if (checkCollision(Game.paddle.getCollisionBoxLeft())) {
+			if(Game.paddle.getSpeedX() < 0){
+				speedX = -SPEED;
+			} else {
+				speedX = -speedX;
+			}
+		}
+		if (checkCollision(Game.paddle.getCollisionBoxRight())) {
+			if(Game.paddle.getSpeedX() > 0){
+				speedX = SPEED;
+			} else {
+				speedX = -speedX;
+			}
+		}
+		
 	}
 
 	@Override
 	public boolean checkCollision(Rectangle collisionBox) {
-		return false;
+		return this.collisionBox.intersects(collisionBox);
 
 	}
 

@@ -16,17 +16,24 @@ public class Paddle extends GameObject {
 	private boolean movingLeft = false;
 	private boolean movingRight = false;
 
-	public Rectangle collisionBox = new Rectangle(0, 0, 0, 0);
+	public Rectangle collisionBoxTop = new Rectangle(0, 0, 0, 0);
+	public Rectangle collisionBoxLeft = new Rectangle(0, 0, 0, 0);
+	public Rectangle collisionBoxRight = new Rectangle(0, 0, 0, 0);
 
 	public Paddle(int centerX, int centerY) {
 		super(centerX, centerY);
-		collisionBox.setBounds(this.getCenterX() - this.getWidth() / 2,
+		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2,
 				this.getCenterY() - this.getWidth() / 2, this.getWidth(), 1);
+		collisionBoxLeft.setBounds(this.getCenterX() - this.getWidth() / 2,
+				this.getCenterY() - this.getWidth() / 2, 1, this.getHEIGHT());
+		collisionBoxRight.setBounds(this.getCenterX() + this.getWidth() / 2,
+				this.getCenterY() - this.getWidth() / 2, 1, this.getHEIGHT());
 		color = Color.blue;
 	}
 
 	@Override
 	public void update() {
+		int oldX = centerX;
 		centerX += speedX;
 
 		if (centerX <= width / 2) {
@@ -37,16 +44,25 @@ public class Paddle extends GameObject {
 			speedX = 0;
 			movingRight = false;
 		}
+		
+		if (checkCollision(Game.ball.getCollisionBox())){
+			centerX = oldX;
+		}
 
-		collisionBox.setBounds(this.getCenterX() - this.getWidth() / 2,
+		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2,
 				this.getCenterY() - this.getWidth() / 2, this.getWidth(), 1);
+		collisionBoxLeft.setBounds(this.getCenterX() - this.getWidth() / 2,
+				this.getCenterY() - this.getWidth() / 2, 1, this.getHEIGHT());
+		collisionBoxRight.setBounds(this.getCenterX() + this.getWidth() / 2,
+				this.getCenterY() - this.getWidth() / 2, 1, this.getHEIGHT());
 
 	}
 
 	@Override
 	public boolean checkCollision(Rectangle collisionBox) {
-		if (this.collisionBox.intersects(collisionBox.getBounds())) {
-
+		if (this.collisionBoxTop.intersects(collisionBox.getBounds())
+				|| this.collisionBoxLeft.intersects(collisionBox.getBounds())
+				|| this.collisionBoxRight.intersects(collisionBox.getBounds())) {
 			return true;
 		}
 		return false;
@@ -131,12 +147,28 @@ public class Paddle extends GameObject {
 		this.movingRight = movingRight;
 	}
 
-	public Rectangle getCollisionBox() {
-		return collisionBox;
+	public Rectangle getCollisionBoxTop() {
+		return collisionBoxTop;
 	}
 
-	public void setCollisionBox(Rectangle collisionBox) {
-		this.collisionBox = collisionBox;
+	public void setCollisionBoxTop(Rectangle collisionBoxTop) {
+		this.collisionBoxTop = collisionBoxTop;
+	}
+
+	public Rectangle getCollisionBoxLeft() {
+		return collisionBoxLeft;
+	}
+
+	public void setCollisionBoxLeft(Rectangle collisionBoxLeft) {
+		this.collisionBoxLeft = collisionBoxLeft;
+	}
+
+	public Rectangle getCollisionBoxRight() {
+		return collisionBoxRight;
+	}
+
+	public void setCollisionBoxRight(Rectangle collisionBoxRight) {
+		this.collisionBoxRight = collisionBoxRight;
 	}
 
 	public int getHEIGHT() {
