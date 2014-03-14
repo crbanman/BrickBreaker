@@ -8,10 +8,10 @@ public class Paddle extends GameObject {
 
 	private final int HEIGHT = 15;
 
-	private int width = 75;
+	private int width = 70;
 	private int speedX = 0;
 	private int speedY = 0;
-	private int moveSpeed = 4;
+	private int moveSpeed = 8;
 
 	private boolean movingLeft = false;
 	private boolean movingRight = false;
@@ -22,12 +22,7 @@ public class Paddle extends GameObject {
 
 	public Paddle(int centerX, int centerY) {
 		super(centerX, centerY);
-		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2 + 3,
-				this.getCenterY(), this.getWidth(), 1);
-		collisionBoxLeft.setBounds(this.getCenterX() - this.getWidth() / 2,
-				this.getCenterY(), 3, this.getHEIGHT());
-		collisionBoxRight.setBounds(this.getCenterX() + this.getWidth() / 2,
-				this.getCenterY(), 3, this.getHEIGHT());
+		updateCollisionBox();
 		color = new Color(0, 128, 255);
 	}
 
@@ -44,12 +39,7 @@ public class Paddle extends GameObject {
 			movingRight = false;
 		}
 
-		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2,
-				this.getCenterY(), this.getWidth(), 1);
-		collisionBoxLeft.setBounds(this.getCenterX() - this.getWidth() / 2,
-				this.getCenterY(), 1, this.getHEIGHT());
-		collisionBoxRight.setBounds(this.getCenterX() + this.getWidth() / 2,
-				this.getCenterY(), 1, this.getHEIGHT());
+		updateCollisionBox();
 
 	}
 
@@ -62,24 +52,23 @@ public class Paddle extends GameObject {
 		}
 		return false;
 	}
+	
+	private void updateCollisionBox(){
+		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2,
+				this.getCenterY(), this.getWidth(), 5);
+		collisionBoxLeft.setBounds(this.getCenterX() - this.getWidth() / 2,
+				this.getCenterY()+5, 1, this.getHEIGHT()-5);
+		collisionBoxRight.setBounds(this.getCenterX() + this.getWidth() / 2,
+				this.getCenterY()+5, 1, this.getHEIGHT()-5);
+	}
 
 	public void draw(Graphics g) {
 		g.setColor(this.getColor());
-		g.fillOval(this.getCenterX() - this.getWidth() / 2, this.getCenterY(),
+		g.fillRect(this.getCenterX() - this.getWidth() / 2, this.getCenterY(),
 				this.getWidth(), this.getHEIGHT());
 		g.setColor(Color.black);
-		g.drawOval(this.getCenterX() - this.getWidth() / 2, this.getCenterY(),
+		g.drawRect(this.getCenterX() - this.getWidth() / 2, this.getCenterY(),
 				this.getWidth(), this.getHEIGHT());
-		g.setColor(this.getColor());
-		g.fillRect(this.getCenterX() - this.getWidth() / 2, this.getCenterY()
-				+ this.getHEIGHT() / 2, this.getWidth(), this.getHEIGHT() / 2 + 4);
-		g.setColor(Color.black);
-		g.drawRect(this.getCenterX() - this.getWidth() / 2, this.getCenterY()
-				+ this.getHEIGHT() / 2, this.getWidth(), this.getHEIGHT() / 2 + 4);
-		g.setColor(this.getColor());
-		g.drawLine(this.getCenterX() - this.getWidth() / 2, this.getCenterY()
-				+ this.getHEIGHT() / 2, this.getCenterX() + this.getWidth()/2, this.getCenterY()
-				+ this.getHEIGHT() / 2);
 	}
 
 	public void moveLeft() {
