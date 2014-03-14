@@ -87,7 +87,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / nsPerTick;
 			lastTime = now;
-			boolean shouldRender = true; // set to false to limit FPS to 60
+			boolean shouldRender = false; // set to false to limit FPS to 60
 
 			while (delta >= 1) {
 				ticks++;
@@ -96,12 +96,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 				shouldRender = true;
 			}
 
-			// this is for testing purposes only. Remove before distribution.
-			try {
-				Thread.sleep(2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+//			// this is for testing purposes only. Remove before distribution.
+//			try {
+//				Thread.sleep(2);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
 
 			if (shouldRender) {
 				frames++;

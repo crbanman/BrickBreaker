@@ -26,16 +26,16 @@ public class Brick extends GameObject {
 				this.getCenterY() - this.getHEIGHT() / 2, this.getWIDTH(),
 				this.getHEIGHT());
 
-		collisionBoxTop.setBounds(this.getCenterX() - this.getWIDTH() / 2 + 2,
-				this.getCenterY() - this.getHEIGHT() / 2, this.getWIDTH() - 2,
+		collisionBoxTop.setBounds(this.getCenterX() - this.getWIDTH() / 2,
+				this.getCenterY() - this.getHEIGHT() / 2, this.getWIDTH(),
 				1);
 		collisionBoxBottom.setBounds(this.getCenterX() - this.getWIDTH() / 2
-				+ 2, this.getCenterY() + this.getHEIGHT() / 2,
-				this.getWIDTH() - 2, 1);
+				, this.getCenterY() + this.getHEIGHT() / 2,
+				this.getWIDTH() , 1);
 		collisionBoxLeft.setBounds(this.getCenterX() - this.getWIDTH() / 2,
-				this.getCenterY() - this.getHEIGHT() / 2, 1, this.getHEIGHT());
-		collisionBoxTop.setBounds(this.getCenterX() + this.getWIDTH() / 2,
-				this.getCenterY() - this.getHEIGHT() / 2, 1, this.getHEIGHT());
+				this.getCenterY() - this.getHEIGHT() / 2 + 1, 1, this.getHEIGHT()-2);
+		collisionBoxRight.setBounds(this.getCenterX() + this.getWIDTH() / 2,
+				this.getCenterY() - this.getHEIGHT() / 2+1, 1, this.getHEIGHT()-2);
 
 		updateColor();
 	}

@@ -44,12 +44,12 @@ public class Paddle extends GameObject {
 			movingRight = false;
 		}
 
-		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2 + 1,
-				this.getCenterY(), this.getWidth() - 1, 1);
+		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2,
+				this.getCenterY(), this.getWidth(), 1);
 		collisionBoxLeft.setBounds(this.getCenterX() - this.getWidth() / 2,
-				this.getCenterY(), 2, this.getHEIGHT());
+				this.getCenterY(), 1, this.getHEIGHT());
 		collisionBoxRight.setBounds(this.getCenterX() + this.getWidth() / 2,
-				this.getCenterY(), 2, this.getHEIGHT());
+				this.getCenterY(), 1, this.getHEIGHT());
 
 	}
 

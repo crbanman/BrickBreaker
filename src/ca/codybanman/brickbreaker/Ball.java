@@ -6,10 +6,12 @@ import java.awt.Rectangle;
 
 public class Ball extends GameObject {
 
-	private final int RADIUS = 10;
+	private final int RADIUS = 5;
 	private final int SPEED = 5;
 	private int speedX = SPEED;
 	private int speedY = SPEED;
+
+	private boolean collision = false;
 
 	public Rectangle collisionBox = new Rectangle(0, 0, 0, 0);
 
@@ -28,63 +30,80 @@ public class Ball extends GameObject {
 		collisionBox.setBounds(centerX - RADIUS, centerY - RADIUS, RADIUS * 2,
 				RADIUS * 2);
 
-		if (centerX - RADIUS <= 0 || centerX + RADIUS >= Game.WIDTH + 10) {
+		wallCollisions();
+		paddleCollision();
+		brickCollision();
+		
+		collision = false;
+
+	}
+
+	private void wallCollisions() {
+		if (centerX - RADIUS <= 0){ 
 			speedX = -speedX;
+			centerX = 0 + RADIUS;
+		} else if(centerX + RADIUS >= Game.WIDTH + 10) {
+			speedX = -speedX;
+			centerX = Game.WIDTH + 10 - RADIUS;
 		}
-		if (centerY - RADIUS <= 0
-				|| centerY + RADIUS >= Game.HEIGHT + RADIUS * 2 + 10) {
+		if (centerY - RADIUS <= 0) {
 			speedY = -speedY;
-		}
-
-		// Paddle Collisions
-
-		if (checkCollision(Game.paddle.getCollisionBoxTop())) {
+			centerY = 0 + RADIUS;
+		} else if(centerY + RADIUS >= Game.HEIGHT + RADIUS * 2 + 10) {
 			speedY = -speedY;
+			centerY = Game.HEIGHT + RADIUS + 10;
 		}
+	}
+
+	private void paddleCollision() {
+
 		if (checkCollision(Game.paddle.getCollisionBoxLeft())) {
-			if (Game.paddle.getSpeedX() < 0) {
-				speedX = -SPEED;
-			} else {
-				speedX = -speedX;
-			}
-		}
-		if (checkCollision(Game.paddle.getCollisionBoxRight())) {
-			if (Game.paddle.getSpeedX() > 0) {
-				speedX = SPEED;
-			} else {
-				speedX = -speedX;
-			}
-		}
+			speedY = -speedY;
+			speedX = -speedX;
+			centerX = (int) (Game.paddle.getCollisionBoxLeft().getX() - RADIUS);
+			centerY = (int) (Game.paddle.getCollisionBoxLeft().getY() - RADIUS);
 
-		// Brick Collisions
+		} else if (checkCollision(Game.paddle.getCollisionBoxRight())) {
+			speedY = -speedY;
+			speedX = -speedX;
+			centerX = (int) (Game.paddle.getCollisionBoxRight().getX() + RADIUS);
+			centerY = (int) (Game.paddle.getCollisionBoxRight().getY() + RADIUS);
+		} else if (checkCollision(Game.paddle.getCollisionBoxTop())) {
+			speedY = -speedY;
+			centerY = (int) (Game.paddle.getCollisionBoxTop().getY() - RADIUS);
+		}
+	}
 
+	private void brickCollision() {
 		for (int i = 0; i < Game.brickArray.size(); i++) {
 			if (checkCollision(Game.brickArray.get(i).collisionBox)) {
-				if ((checkCollision(Game.brickArray.get(i).collisionBoxLeft) && checkCollision(Game.brickArray
-						.get(i).collisionBoxTop))
-						|| (checkCollision(Game.brickArray.get(i).collisionBoxRight) && checkCollision(Game.brickArray
-								.get(i).collisionBoxTop))
-						|| (checkCollision(Game.brickArray.get(i).collisionBoxLeft) && checkCollision(Game.brickArray
-								.get(i).collisionBoxBottom))
-						|| (checkCollision(Game.brickArray.get(i).collisionBoxRight) && checkCollision(Game.brickArray
-								.get(i).collisionBoxBottom))) {
-					speedX = -speedX;
+				if(checkCollision(Game.brickArray.get(i).getCollisionBoxTop()) && !collision){
 					speedY = -speedY;
+					centerY = (int) (Game.brickArray.get(i).getCollisionBoxTop().getY() - RADIUS);
 					Game.brickArray.get(i).hit();
-				} // if it hits corners
-				else if (checkCollision(Game.brickArray.get(i).collisionBoxLeft)
-						|| checkCollision(Game.brickArray.get(i).collisionBoxRight)) {
-					speedX = -speedX;
-					Game.brickArray.get(i).hit();
-				}// if hits sides
-				else if (checkCollision(Game.brickArray.get(i).collisionBoxTop)
-						|| checkCollision(Game.brickArray.get(i).collisionBoxBottom)) {
+					collision = true;
+				} // top collision
+				else if(checkCollision(Game.brickArray.get(i).getCollisionBoxBottom()) && !collision){
 					speedY = -speedY;
+					centerY = (int) (Game.brickArray.get(i).getCollisionBoxBottom().getY() + RADIUS);
 					Game.brickArray.get(i).hit();
-				} // hits top or bottom
+					collision = true;
+				} // bottom collision
+				else if(checkCollision(Game.brickArray.get(i).getCollisionBoxLeft()) && !collision){
+					speedX = -speedX;
+					centerX = (int) (Game.brickArray.get(i).getCollisionBoxLeft().getX() - RADIUS);
+					Game.brickArray.get(i).hit();
+					collision = true;
+				} // left collision
+				else if(checkCollision(Game.brickArray.get(i).getCollisionBoxRight()) && !collision){
+					speedX = -speedX;
+					centerX = (int) (Game.brickArray.get(i).getCollisionBoxRight().getX() + RADIUS);
+					Game.brickArray.get(i).hit();
+					collision = true;
+				} // right collision
+				
 			} // if intersects
 		}
-
 	}
 
 	@Override
@@ -100,6 +119,14 @@ public class Ball extends GameObject {
 		g.setColor(Color.BLACK);
 		g.drawOval(this.getCenterX() - this.getRADIUS(), this.getCenterY()
 				- this.getRADIUS(), this.getRADIUS() * 2, this.getRADIUS() * 2);
+	}
+
+	public int getX() {
+		return centerX - RADIUS;
+	}
+
+	public int getY() {
+		return centerY - RADIUS;
 	}
 
 	public int getSpeedX() {
