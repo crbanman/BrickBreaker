@@ -22,12 +22,12 @@ public class Ball extends GameObject {
 
 	@Override
 	public void update() {
-		
+
 		centerX += speedX;
 		centerY += speedY;
 		collisionBox.setBounds(centerX - RADIUS, centerY - RADIUS, RADIUS * 2,
 				RADIUS * 2);
-		
+
 		if (centerX - RADIUS <= 0 || centerX + RADIUS >= Game.WIDTH + 10) {
 			speedX = -speedX;
 		}
@@ -36,24 +36,55 @@ public class Ball extends GameObject {
 			speedY = -speedY;
 		}
 
+		// Paddle Collisions
+
 		if (checkCollision(Game.paddle.getCollisionBoxTop())) {
 			speedY = -speedY;
 		}
 		if (checkCollision(Game.paddle.getCollisionBoxLeft())) {
-			if(Game.paddle.getSpeedX() < 0){
+			if (Game.paddle.getSpeedX() < 0) {
 				speedX = -SPEED;
 			} else {
 				speedX = -speedX;
 			}
 		}
 		if (checkCollision(Game.paddle.getCollisionBoxRight())) {
-			if(Game.paddle.getSpeedX() > 0){
+			if (Game.paddle.getSpeedX() > 0) {
 				speedX = SPEED;
 			} else {
 				speedX = -speedX;
 			}
 		}
-		
+
+		// Brick Collisions
+
+		for (int i = 0; i < Game.brickArray.size(); i++) {
+			if (checkCollision(Game.brickArray.get(i).collisionBox)) {
+				if ((checkCollision(Game.brickArray.get(i).collisionBoxLeft) && checkCollision(Game.brickArray
+						.get(i).collisionBoxTop))
+						|| (checkCollision(Game.brickArray.get(i).collisionBoxRight) && checkCollision(Game.brickArray
+								.get(i).collisionBoxTop))
+						|| (checkCollision(Game.brickArray.get(i).collisionBoxLeft) && checkCollision(Game.brickArray
+								.get(i).collisionBoxBottom))
+						|| (checkCollision(Game.brickArray.get(i).collisionBoxRight) && checkCollision(Game.brickArray
+								.get(i).collisionBoxBottom))) {
+					speedX = -speedX;
+					speedY = -speedY;
+					Game.brickArray.get(i).hit();
+				} // if it hits corners
+				else if (checkCollision(Game.brickArray.get(i).collisionBoxLeft)
+						|| checkCollision(Game.brickArray.get(i).collisionBoxRight)) {
+					speedX = -speedX;
+					Game.brickArray.get(i).hit();
+				}// if hits sides
+				else if (checkCollision(Game.brickArray.get(i).collisionBoxTop)
+						|| checkCollision(Game.brickArray.get(i).collisionBoxBottom)) {
+					speedY = -speedY;
+					Game.brickArray.get(i).hit();
+				} // hits top or bottom
+			} // if intersects
+		}
+
 	}
 
 	@Override

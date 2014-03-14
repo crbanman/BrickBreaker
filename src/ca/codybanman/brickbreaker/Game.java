@@ -8,6 +8,10 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -28,6 +32,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static Ball ball;
 	public static Paddle paddle;
 
+	public static ArrayList<Brick> brickArray = new ArrayList<Brick>();
+
 	public Game() {
 		setMinimumSize(new Dimension(WIDTH, HEIGHT));
 		setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -46,8 +52,15 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		ball = new Ball(100, 100);
-		paddle = new Paddle((WIDTH + 10) / 2, HEIGHT);
+
+		paddle = new Paddle((WIDTH + 10) / 2, 525);
+		ball = new Ball((WIDTH + 10) / 2, 500);
+
+		try {
+			loadLevel("res/level01.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -108,8 +121,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public void tick() {
 		ball.update();
 		paddle.update();
-
-		
+		for (int i = 0; i < brickArray.size(); i++) {
+			if (brickArray.get(i).getHealth() == 0) {
+				brickArray.remove(i);
+			}
+		}
 	}
 
 	public void render() {
@@ -123,11 +139,56 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g.setColor(background);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
-		ball.draw(g);
+		for (int i = 0; i < brickArray.size(); i++) {
+			brickArray.get(i).draw(g);
+		}
+
 		paddle.draw(g);
+		ball.draw(g);
 
 		g.dispose();
 		bs.show();
+	}
+
+	private void loadLevel(String filename) throws IOException {
+		ArrayList<String> lines = new ArrayList<String>();
+		int width = 8;
+		int height = 0;
+
+		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		while (true) {
+			String line = reader.readLine();
+			// no more lines to read
+			if (line == null) {
+				reader.close();
+				break;
+			}
+
+			if (!line.startsWith("!")) {
+				lines.add(line);
+			}
+		}
+		height = lines.size();
+
+		for (int j = 0; j < height; j++) {
+			String line = (String) lines.get(j);
+			for (int i = 0; i < width; i++) {
+				if (i < line.length()) {
+					if (Character.getNumericValue(line.charAt(i)) != 0) {
+						char ch = line.charAt(i);
+						if (ch == 'M') {
+							Brick b = new Brick(25 + i * 50, 10 + j * 20, -1);
+							brickArray.add(b);
+						} else {
+							Brick b = new Brick(25 + i * 50, 10 + j * 20,
+									Character.getNumericValue(ch));
+							brickArray.add(b);
+						}
+					}
+				}
+			}
+		}
+
 	}
 
 	public static void main(String args[]) {

@@ -1,0 +1,16 @@
+! Brick Breaker Level 1
+! # = End of level
+! M = Metal Brick (Unbreakable)
+! 0 = Empty Space
+! 1-9 = Brick with health equal to number (1 is a brick with 1 health)
+!-------
+00000000
+01233210
+00122100
+00011000
+00000000
+0MM00MM0
+00000000
+00011000
+00122100
+01233210
