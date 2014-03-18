@@ -6,36 +6,21 @@ import java.awt.Rectangle;
 
 public class Brick extends GameObject {
 
-	private static final int WIDTH = 50;
+	private static final int WIDTH = 52;
 	private static final int HEIGHT = 20;
 
 	private int health;
 
 	public Rectangle collisionBox = new Rectangle(0, 0, 0, 0);
-	public Rectangle collisionBoxTop = new Rectangle(0, 0, 0, 0);
-	public Rectangle collisionBoxBottom = new Rectangle(0, 0, 0, 0);
-	public Rectangle collisionBoxLeft = new Rectangle(0, 0, 0, 0);
-	public Rectangle collisionBoxRight = new Rectangle(0, 0, 0, 0);
 
 	public Brick(int centerX, int centerY, int health) {
 		super(centerX, centerY);
 
 		this.health = health;
 
-		collisionBox.setBounds(this.getCenterX() - this.getWIDTH() / 2,
-				this.getCenterY() - this.getHEIGHT() / 2, this.getWIDTH(),
-				this.getHEIGHT());
-
-		collisionBoxTop.setBounds(this.getCenterX() - this.getWIDTH() / 2,
-				this.getCenterY() - this.getHEIGHT() / 2, this.getWIDTH(),
-				1);
-		collisionBoxBottom.setBounds(this.getCenterX() - this.getWIDTH() / 2
-				, this.getCenterY() + this.getHEIGHT() / 2,
-				this.getWIDTH() , 1);
-		collisionBoxLeft.setBounds(this.getCenterX() - this.getWIDTH() / 2,
-				this.getCenterY() - this.getHEIGHT() / 2 + 1, 1, this.getHEIGHT()-2);
-		collisionBoxRight.setBounds(this.getCenterX() + this.getWIDTH() / 2,
-				this.getCenterY() - this.getHEIGHT() / 2+1, 1, this.getHEIGHT()-2);
+		collisionBox.setBounds((int) (this.getCenterX() - this.getWIDTH() / 2),
+				(int) (this.getCenterY() - this.getHEIGHT() / 2),
+				this.getWIDTH(), this.getHEIGHT());
 
 		updateColor();
 	}
@@ -67,28 +52,25 @@ public class Brick extends GameObject {
 
 	@Override
 	public boolean checkCollision(Rectangle collisionBox) {
-		if (this.collisionBoxTop.intersects(collisionBox.getBounds())
-				|| this.collisionBoxBottom.intersects(collisionBox)
-				|| this.collisionBoxLeft.intersects(collisionBox.getBounds())
-				|| this.collisionBoxRight.intersects(collisionBox.getBounds())) {
-			return true;
-		}
-		return false;
+		return this.collisionBox.intersects(collisionBox);
 
 	}
 
 	public void draw(Graphics g) {
 		g.setColor(this.getColor());
-		g.fillRect(this.getCenterX() - this.getWIDTH() / 2, this.getCenterY()
-				- this.getHEIGHT() / 2, this.getWIDTH(), this.getHEIGHT());
+		g.fillRect((int) (this.getCenterX() - this.getWIDTH() / 2),
+				(int) (this.getCenterY() - this.getHEIGHT() / 2),
+				this.getWIDTH(), this.getHEIGHT());
 		g.setColor(Color.black);
-		g.drawRect(this.getCenterX() - this.getWIDTH() / 2, this.getCenterY()
-				- this.getHEIGHT() / 2, this.getWIDTH(), this.getHEIGHT());
-		g.drawString("" + health, centerX, centerY);
+		g.drawRect((int) (this.getCenterX() - this.getWIDTH() / 2),
+				(int) (this.getCenterY() - this.getHEIGHT() / 2),
+				this.getWIDTH(), this.getHEIGHT());
+		g.drawString("" + health, (int)centerX, (int)centerY);
 	}
 
 	public void hit() {
 		health--;
+		Game.score += 10;
 		updateColor();
 	}
 
@@ -100,36 +82,8 @@ public class Brick extends GameObject {
 		this.health = health;
 	}
 
-	public Rectangle getCollisionBoxTop() {
-		return collisionBoxTop;
-	}
-
-	public void setCollisionBoxTop(Rectangle collisionBoxTop) {
-		this.collisionBoxTop = collisionBoxTop;
-	}
-
-	public Rectangle getCollisionBoxBottom() {
-		return collisionBoxBottom;
-	}
-
-	public void setCollisionBoxBottom(Rectangle collisionBoxBottom) {
-		this.collisionBoxBottom = collisionBoxBottom;
-	}
-
-	public Rectangle getCollisionBoxLeft() {
-		return collisionBoxLeft;
-	}
-
-	public void setCollisionBoxLeft(Rectangle collisionBoxLeft) {
-		this.collisionBoxLeft = collisionBoxLeft;
-	}
-
-	public Rectangle getCollisionBoxRight() {
-		return collisionBoxRight;
-	}
-
-	public void setCollisionBoxRight(Rectangle collisionBoxRight) {
-		this.collisionBoxRight = collisionBoxRight;
+	public Rectangle getCollisionBox() {
+		return collisionBox;
 	}
 
 	public int getWIDTH() {

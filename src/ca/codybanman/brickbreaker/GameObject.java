@@ -6,10 +6,10 @@ import java.awt.Rectangle;
 
 public abstract class GameObject {
 
-	protected int centerX, centerY;
+	protected double centerX, centerY;
 	protected Color color;
 
-	public GameObject(int centerX, int centerY) {
+	public GameObject(double centerX, double centerY) {
 		this.centerX = centerX;
 		this.centerY = centerY;
 	}
@@ -20,19 +20,19 @@ public abstract class GameObject {
 
 	public abstract void draw(Graphics g);
 
-	public int getCenterX() {
+	public double getCenterX() {
 		return centerX;
 	}
 
-	public void setCenterX(int centerX) {
+	public void setCenterX(double centerX) {
 		this.centerX = centerX;
 	}
 
-	public int getCenterY() {
+	public double getCenterY() {
 		return centerY;
 	}
 
-	public void setCenterY(int centerY) {
+	public void setCenterY(double centerY) {
 		this.centerY = centerY;
 	}
 

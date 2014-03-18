@@ -7,6 +7,9 @@ import java.awt.Rectangle;
 public class Paddle extends GameObject {
 
 	private final int HEIGHT = 15;
+	
+	private int startingX;
+	private int startingY;
 
 	private int width = 70;
 	private int speedX = 0;
@@ -22,6 +25,8 @@ public class Paddle extends GameObject {
 
 	public Paddle(int centerX, int centerY) {
 		super(centerX, centerY);
+		startingX = centerX;
+		startingY = centerY;
 		updateCollisionBox();
 		color = new Color(0, 128, 255);
 	}
@@ -34,7 +39,7 @@ public class Paddle extends GameObject {
 			centerX = width / 2 + 1;
 		}
 		if (centerX + width / 2 >= Game.WIDTH + 10) {
-			centerX = Game.WIDTH + 10 - width / 2;
+			centerX = Game.WIDTH + 10 - width / 2 - 1;
 			speedX = 0;
 			movingRight = false;
 		}
@@ -54,20 +59,20 @@ public class Paddle extends GameObject {
 	}
 	
 	private void updateCollisionBox(){
-		collisionBoxTop.setBounds(this.getCenterX() - this.getWidth() / 2,
-				this.getCenterY(), this.getWidth(), 5);
-		collisionBoxLeft.setBounds(this.getCenterX() - this.getWidth() / 2,
-				this.getCenterY()+5, 1, this.getHEIGHT()-5);
-		collisionBoxRight.setBounds(this.getCenterX() + this.getWidth() / 2,
-				this.getCenterY()+5, 1, this.getHEIGHT()-5);
+		collisionBoxTop.setBounds((int)(this.getCenterX() - this.getWidth() / 2),
+				(int)this.getCenterY(), this.getWidth(), 5);
+		collisionBoxLeft.setBounds((int)(this.getCenterX() - this.getWidth() / 2),
+				(int)this.getCenterY()+5, 1, this.getHEIGHT()-5);
+		collisionBoxRight.setBounds((int)(this.getCenterX() + this.getWidth() / 2),
+				(int)this.getCenterY()+5, 1, this.getHEIGHT()-5);
 	}
 
 	public void draw(Graphics g) {
 		g.setColor(this.getColor());
-		g.fillRect(this.getCenterX() - this.getWidth() / 2, this.getCenterY(),
+		g.fillRect((int)(this.getCenterX() - this.getWidth() / 2), (int)this.getCenterY(),
 				this.getWidth(), this.getHEIGHT());
 		g.setColor(Color.black);
-		g.drawRect(this.getCenterX() - this.getWidth() / 2, this.getCenterY(),
+		g.drawRect((int)(this.getCenterX() - this.getWidth() / 2), (int)this.getCenterY(),
 				this.getWidth(), this.getHEIGHT());
 	}
 
@@ -99,6 +104,11 @@ public class Paddle extends GameObject {
 		if (isMovingRight() == true && isMovingLeft() == false) {
 			moveRight();
 		}
+	}
+	
+	public void reset() {
+		centerX = startingX;
+		centerY = startingY;
 	}
 
 	public int getWidth() {

@@ -18,19 +18,24 @@ import javax.swing.JFrame;
 public class Game extends Canvas implements Runnable, KeyListener {
 
 	private static final long serialVersionUID = 1L;
+	
+	private String path = "src/ca/codybanman/brickbreaker/levels/";
 
-	public static final int WIDTH = 400;
+	public static final int WIDTH = 405;
 	public static final int HEIGHT = 550;
 	public static final String NAME = "BrickBreak!";
 	static Graphics g;
 
-	public static Color background = Color.LIGHT_GRAY;
+	public static Color background = Color.gray;
 
 	private JFrame frame;
 
 	public boolean running = false;
 	public static Ball ball;
 	public static Paddle paddle;
+	
+	public static int score = 0;
+	public static int level = 1;
 
 	public static ArrayList<Brick> brickArray = new ArrayList<Brick>();
 
@@ -53,11 +58,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
-		paddle = new Paddle((WIDTH + 10) / 2, 525);
-		ball = new Ball((WIDTH + 10) / 2, 500);
+		paddle = new Paddle((Game.WIDTH + 10) / 2, 525);
+		ball = new Ball(200, 500);
 
 		try {
-			loadLevel("res/level01.txt");
+			loadLevel(path, level);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -110,7 +115,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 			if (System.currentTimeMillis() - lastTimer >= 1000) {
 				lastTimer += 1000;
-				System.out.println(ticks + " ticks, " + frames + " frames");
+				//System.out.println(ticks + " ticks, " + frames + " frames");
 				frames = 0;
 				ticks = 0;
 			}
@@ -126,6 +131,16 @@ public class Game extends Canvas implements Runnable, KeyListener {
 				brickArray.remove(i);
 			}
 		}
+		if(brickArray.isEmpty() && level < 2){
+			level++;
+			paddle.reset();
+			ball.reset();
+			try {
+				loadLevel(path, level);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void render() {
@@ -138,6 +153,18 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g = bs.getDrawGraphics();
 		g.setColor(background);
 		g.fillRect(0, 0, getWidth(), getHeight());
+		
+		g.setColor(Color.lightGray);
+		g.fillRect(0, 0, getWidth(), 30);
+		g.setColor(Color.black);
+		g.drawRect(0, 0, getWidth(), 30);
+		
+		String currentLevel = "Level " + level;
+		g.drawString(currentLevel, getWidth() / 2 - 20, 20);
+		
+		String currentScore = "Score: " + score;
+		g.drawString(currentScore, getWidth() - 100, 20);
+		
 
 		for (int i = 0; i < brickArray.size(); i++) {
 			brickArray.get(i).draw(g);
@@ -150,12 +177,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		bs.show();
 	}
 
-	private void loadLevel(String filename) throws IOException {
+	private void loadLevel(String path, int level) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
 		int width = 8;
 		int height = 0;
 
-		BufferedReader reader = new BufferedReader(new FileReader(filename));
+		BufferedReader reader = new BufferedReader(new FileReader(path + "level" + level + ".txt"));
 		while (true) {
 			String line = reader.readLine();
 			// no more lines to read
@@ -177,10 +204,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 					if (Character.getNumericValue(line.charAt(i)) != 0) {
 						char ch = line.charAt(i);
 						if (ch == 'M') {
-							Brick b = new Brick(25 + i * 50, 10 + j * 20, -1);
+							Brick b = new Brick(25 + i * 52, 40 + j * 20, -1);
 							brickArray.add(b);
 						} else {
-							Brick b = new Brick(25 + i * 50, 10 + j * 20,
+							Brick b = new Brick(25 + i * 52, 40 + j * 20,
 									Character.getNumericValue(ch));
 							brickArray.add(b);
 						}
