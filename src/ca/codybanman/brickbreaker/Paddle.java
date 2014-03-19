@@ -19,9 +19,7 @@ public class Paddle extends GameObject {
 	private boolean movingLeft = false;
 	private boolean movingRight = false;
 
-	public Rectangle collisionBoxTop = new Rectangle(0, 0, 0, 0);
-	public Rectangle collisionBoxLeft = new Rectangle(0, 0, 0, 0);
-	public Rectangle collisionBoxRight = new Rectangle(0, 0, 0, 0);
+	public Rectangle collisionBox = new Rectangle(0, 0, 0, 0);
 
 	public Paddle(int centerX, int centerY) {
 		super(centerX, centerY);
@@ -50,21 +48,12 @@ public class Paddle extends GameObject {
 
 	@Override
 	public boolean checkCollision(Rectangle collisionBox) {
-		if (this.collisionBoxTop.intersects(collisionBox.getBounds())
-				|| this.collisionBoxLeft.intersects(collisionBox.getBounds())
-				|| this.collisionBoxRight.intersects(collisionBox.getBounds())) {
-			return true;
-		}
-		return false;
+		return this.collisionBox.intersects(collisionBox);
 	}
 	
 	private void updateCollisionBox(){
-		collisionBoxTop.setBounds((int)(this.getCenterX() - this.getWidth() / 2),
-				(int)this.getCenterY(), this.getWidth(), 5);
-		collisionBoxLeft.setBounds((int)(this.getCenterX() - this.getWidth() / 2),
-				(int)this.getCenterY()+5, 1, this.getHEIGHT()-5);
-		collisionBoxRight.setBounds((int)(this.getCenterX() + this.getWidth() / 2),
-				(int)this.getCenterY()+5, 1, this.getHEIGHT()-5);
+		collisionBox.setBounds((int)(this.getCenterX() - this.getWidth() / 2), (int)this.getCenterY(),
+				this.getWidth(), this.getHEIGHT());
 	}
 
 	public void draw(Graphics g) {
@@ -151,28 +140,12 @@ public class Paddle extends GameObject {
 		this.movingRight = movingRight;
 	}
 
-	public Rectangle getCollisionBoxTop() {
-		return collisionBoxTop;
+	public Rectangle getCollisionBox() {
+		return collisionBox;
 	}
 
-	public void setCollisionBoxTop(Rectangle collisionBoxTop) {
-		this.collisionBoxTop = collisionBoxTop;
-	}
-
-	public Rectangle getCollisionBoxLeft() {
-		return collisionBoxLeft;
-	}
-
-	public void setCollisionBoxLeft(Rectangle collisionBoxLeft) {
-		this.collisionBoxLeft = collisionBoxLeft;
-	}
-
-	public Rectangle getCollisionBoxRight() {
-		return collisionBoxRight;
-	}
-
-	public void setCollisionBoxRight(Rectangle collisionBoxRight) {
-		this.collisionBoxRight = collisionBoxRight;
+	public void setCollisionBox(Rectangle collisionBox) {
+		this.collisionBox = collisionBox;
 	}
 
 	public int getHEIGHT() {

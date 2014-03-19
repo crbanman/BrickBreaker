@@ -21,7 +21,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	private String path = "src/ca/codybanman/brickbreaker/levels/";
 
-	public static final int WIDTH = 405;
+	public static final int WIDTH = 350;
 	public static final int HEIGHT = 550;
 	public static final String NAME = "BrickBreak!";
 	static Graphics g;
@@ -179,7 +179,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	private void loadLevel(String path, int level) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
-		int width = 8;
+		int width = 7;
 		int height = 0;
 
 		BufferedReader reader = new BufferedReader(new FileReader(path + "level" + level + ".txt"));
