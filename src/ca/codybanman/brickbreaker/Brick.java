@@ -65,7 +65,7 @@ public class Brick extends GameObject {
 		g.drawRect((int) (this.getCenterX() - this.getWIDTH() / 2),
 				(int) (this.getCenterY() - this.getHEIGHT() / 2),
 				this.getWIDTH(), this.getHEIGHT());
-		g.drawString("" + health, (int)centerX, (int)centerY);
+//		g.drawString("" + health, (int)centerX, (int)centerY + 5);
 	}
 
 	public void hit() {

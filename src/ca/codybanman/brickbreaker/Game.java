@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,7 +20,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	private static final long serialVersionUID = 1L;
 	
-	private String path = "src/ca/codybanman/brickbreaker/levels/";
+	private String path = "res/";
 
 	public static final int WIDTH = 350;
 	public static final int HEIGHT = 550;
@@ -158,9 +159,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g.fillRect(0, 0, getWidth(), 30);
 		g.setColor(Color.black);
 		g.drawRect(0, 0, getWidth(), 30);
-		
+
+		g.setFont(new Font("default", Font.BOLD, 16));
 		String currentLevel = "Level " + level;
-		g.drawString(currentLevel, getWidth() / 2 - 20, 20);
+		g.drawString(currentLevel, getWidth() / 2 - 25, 20);
 		
 		String currentScore = "Score: " + score;
 		g.drawString(currentScore, getWidth() - 100, 20);
